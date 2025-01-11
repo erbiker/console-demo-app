@@ -6,3 +6,49 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+// A user to be granted permissions via this application
+// Note: distinct from a authenticated user of this application
+model User {
+  id         String    @id @default(cuid())
+  email      String    @unique
+  firstName  String
+  lastName   String
+  avatar     String?
+  title      String?
+  department String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  Groups Group[]
+
+  @@index([email])
+}
+
+// An access group granting various permissions to users
+model Group {
+  id          String  @id @default(cuid())
+  name        String?
+  description String?
+  note        String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  Users User[]
+}
+
+// An application whose access is granted to users
+model App {
+  id   String @id @default(cuid())
+  name String
+
+  url  String?
+  logo String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
