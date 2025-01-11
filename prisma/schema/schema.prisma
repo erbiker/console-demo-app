@@ -21,15 +21,15 @@ model User {
   updatedAt  DateTime  @updatedAt
   deletedAt  DateTime?
 
-  Groups               Group[]
-  App                  App[]
-  AccessPolicyReviewer AccessPolicyReviewer[]
+  UserGroups                   UserGroup[]
+  OwnedApps                    App[]
+  AccessPolicyApprovalReviewer AccessPolicyApprovalReviewer[]
 
   @@index([email])
 }
 
 // An access group granting various permissions to users
-model Group {
+model UserGroup {
   id          String  @id @default(cuid())
   name        String?
   description String?
@@ -69,7 +69,7 @@ model AccessPolicy {
   app   App    @relation(fields: [appId], references: [id])
   appId String
 
-  reviewers AccessPolicyReviewer[]
+  approvals AccessPolicyApproval[]
 
   publishedAt DateTime?
 
@@ -80,13 +80,27 @@ model AccessPolicy {
   deletedAt DateTime?
 }
 
-model AccessPolicyReviewer {
+model AccessPolicyApproval {
   id String @id @default(cuid())
 
-  user           User         @relation(fields: [userId], references: [id])
-  userId         String
-  AccessPolicy   AccessPolicy @relation(fields: [accessPolicyId], references: [id])
-  accessPolicyId String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  AccessPolicy                 AccessPolicy                   @relation(fields: [accessPolicyId], references: [id])
+  accessPolicyId               String
+  AccessPolicyApprovalReviewer AccessPolicyApprovalReviewer[]
+
+  priority Int
+}
+
+model AccessPolicyApprovalReviewer {
+  id String @id @default(cuid())
+
+  user                   User                 @relation(fields: [userId], references: [id])
+  userId                 String
+  AccessPolicyApproval   AccessPolicyApproval @relation(fields: [accessPolicyApprovalId], references: [id])
+  accessPolicyApprovalId String
 }
 
 model ProvisioningAction {
