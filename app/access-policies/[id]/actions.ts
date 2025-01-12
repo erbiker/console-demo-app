@@ -18,6 +18,12 @@ type UpdatePolicyData = {
   };
 };
 
+type UpdateApprovalData = {
+  ApprovalReviewers?: {
+    set: { id: string }[];
+  };
+};
+
 export async function updatePolicy(policyId: string, data: UpdatePolicyData) {
   try {
     await prisma.accessPolicy.update({
@@ -36,6 +42,38 @@ export async function deleteApproval(approvalId: string, policyId: string) {
   try {
     await prisma.accessPolicyApproval.delete({
       where: { id: approvalId },
+    });
+    revalidatePath(`/access-policies/${policyId}`);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+
+export async function addApproval(policyId: string) {
+  try {
+    await prisma.accessPolicyApproval.create({
+      data: {
+        accessPolicyId: policyId,
+        priority: 1,
+      },
+    });
+    revalidatePath(`/access-policies/${policyId}`);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+
+export async function updateApproval(
+  approvalId: string,
+  data: UpdateApprovalData,
+  policyId: string,
+) {
+  try {
+    await prisma.accessPolicyApproval.update({
+      where: { id: approvalId },
+      data,
     });
     revalidatePath(`/access-policies/${policyId}`);
     return { success: true };

@@ -55,7 +55,7 @@ export default async function AccessPolicy({ params }: { params: { id: string } 
           <DetailsTab accessPolicy={accessPolicy} allUsers={users} allGroups={groups} />
         </TabsContent>
         <TabsContent value="approvals">
-          <ApprovalsTab policyId={policyId} approvals={approvals} />
+          <ApprovalsTab policyId={policyId} approvals={approvals} allUsers={users} />
         </TabsContent>
       </Tabs>
     </main>
