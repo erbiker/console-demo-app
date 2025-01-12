@@ -16,70 +16,59 @@ import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useUpdateToast } from '@/hooks/use-update-toast';
-import { User, UserGroup } from '@prisma/client';
+import { AccessPolicy, User, UserGroup } from '@prisma/client';
 import { useEffect, useState, useTransition } from 'react';
 import { updatePolicy } from './actions';
 
 interface DetailsTabProps {
-  policyId: string;
-  initialName: string;
-  initialDescription: string | null;
-  initialUniversalVisibility: boolean;
-  initialIndefiniteAccess: boolean;
-  initialAccessUsers: string[];
-  initialAccessGroups: string[];
-  initialAccessLength: number | null;
+  accessPolicy: AccessPolicy & {
+    UserVisibility: User[];
+    UserGroupVisibility: UserGroup[];
+  };
   allUsers: User[];
   allGroups: UserGroup[];
 }
 
-export function DetailsTab({
-  policyId,
-  initialName,
-  initialDescription,
-  initialUniversalVisibility,
-  initialIndefiniteAccess,
-  initialAccessUsers,
-  initialAccessGroups,
-  initialAccessLength,
-  allUsers,
-  allGroups,
-}: DetailsTabProps) {
+export function DetailsTab({ accessPolicy, allUsers, allGroups }: DetailsTabProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isPending, startTransition] = useTransition();
   const { showUpdateToast } = useUpdateToast();
 
-  const [name, setName] = useState(initialName);
-  const [description, setDescription] = useState(initialDescription ?? '');
-  const [universalVisibility, setUniversalVisibility] = useState(initialUniversalVisibility);
-  const [indefiniteAccess, setIndefiniteAccess] = useState(initialIndefiniteAccess);
-  const [accessLength, setAccessLength] = useState<number | null>(initialAccessLength);
+  const [name, setName] = useState(accessPolicy.name);
+  const [description, setDescription] = useState(accessPolicy.description ?? '');
+  const [universalVisibility, setUniversalVisibility] = useState(accessPolicy.universalVisibility);
+  const [indefiniteAccess, setIndefiniteAccess] = useState(accessPolicy.indefiniteAccess);
+  const [accessLength, setAccessLength] = useState<number | null>(accessPolicy.accessLengthDays);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [accessUsers, setAccessUsers] = useState(initialAccessUsers);
+  const [accessUsers, setAccessUsers] = useState(
+    accessPolicy.UserVisibility.map((user) => user.id),
+  );
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [accessGroups, setAccessGroups] = useState(initialAccessGroups);
+  const [accessGroups, setAccessGroups] = useState(
+    accessPolicy.UserGroupVisibility.map((group) => group.id),
+  );
 
   const debouncedName = useDebounce(name, 1000);
   const debouncedDescription = useDebounce(description, 1000);
 
   useEffect(() => {
-    if (debouncedName === initialName) {
+    if (debouncedName === accessPolicy.name) {
       return;
     }
 
     startTransition(async () => {
-      const result = await updatePolicy(policyId, { name: debouncedName });
+      const result = await updatePolicy(accessPolicy.id, { name: debouncedName });
       showUpdateToast(result);
     });
   }, [debouncedName]);
 
   useEffect(() => {
-    if (debouncedDescription === initialDescription) {
+    if (debouncedDescription === accessPolicy.description) {
       return;
     }
 
     startTransition(async () => {
-      const result = await updatePolicy(policyId, { description: debouncedDescription });
+      const result = await updatePolicy(accessPolicy.id, { description: debouncedDescription });
       showUpdateToast(result);
     });
   }, [debouncedDescription]);
@@ -105,14 +94,16 @@ export function DetailsTab({
         </div>
         <div className="flex flex-row items-center gap-2">
           <Label htmlFor="visibility" className="text-sm font-semibold">
-            Visibility
+            Visible to all users
           </Label>
           <Switch
             checked={universalVisibility}
             onCheckedChange={(checked) => {
               setUniversalVisibility(checked);
               startTransition(async () => {
-                const result = await updatePolicy(policyId, { universalVisibility: checked });
+                const result = await updatePolicy(accessPolicy.id, {
+                  universalVisibility: checked,
+                });
                 showUpdateToast(result);
               });
             }}
@@ -122,7 +113,7 @@ export function DetailsTab({
           <div className="flex flex-col gap-2">
             <div className="space-y-1 p-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-md">
               <Label htmlFor="accessUsers" className="text-sm font-semibold">
-                Access Users
+                Visible to users
               </Label>
               <MultiSelect
                 options={allUsers.map((user) => ({
@@ -132,7 +123,7 @@ export function DetailsTab({
                 onValueChange={(values) => {
                   setAccessUsers(values);
                   startTransition(async () => {
-                    const result = await updatePolicy(policyId, {
+                    const result = await updatePolicy(accessPolicy.id, {
                       UserVisibility: {
                         set: values.map((id) => ({ id })),
                       },
@@ -147,7 +138,7 @@ export function DetailsTab({
             </div>
             <div className="space-y-1 p-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-md">
               <Label htmlFor="accessGroups" className="text-sm font-semibold">
-                Access Groups
+                Visible to groups
               </Label>
               <MultiSelect
                 options={allGroups.map((group) => ({
@@ -157,7 +148,7 @@ export function DetailsTab({
                 onValueChange={(values) => {
                   setAccessGroups(values);
                   startTransition(async () => {
-                    const result = await updatePolicy(policyId, {
+                    const result = await updatePolicy(accessPolicy.id, {
                       UserGroupVisibility: {
                         set: values.map((id) => ({ id })),
                       },
@@ -181,7 +172,7 @@ export function DetailsTab({
             onCheckedChange={(checked) => {
               setIndefiniteAccess(checked);
               startTransition(async () => {
-                const result = await updatePolicy(policyId, {
+                const result = await updatePolicy(accessPolicy.id, {
                   indefiniteAccess: checked,
                 });
                 showUpdateToast(result);
@@ -200,7 +191,7 @@ export function DetailsTab({
                 const newLength = value === 'null' ? null : Number(value);
                 setAccessLength(newLength);
                 startTransition(async () => {
-                  const result = await updatePolicy(policyId, {
+                  const result = await updatePolicy(accessPolicy.id, {
                     accessLengthDays: newLength,
                   });
                   showUpdateToast(result);
