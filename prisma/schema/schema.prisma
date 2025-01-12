@@ -24,6 +24,7 @@ model User {
   UserGroups                   UserGroup[]
   OwnedApps                    App[]
   AccessPolicyApprovalReviewer AccessPolicyApprovalReviewer[]
+  VisibleAccessPolicies        AccessPolicy[]
 
   @@index([email])
 }
@@ -39,7 +40,8 @@ model UserGroup {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  Users User[]
+  Users                 User[]
+  VisibleAccessPolicies AccessPolicy[]
 }
 
 // An application whose access is granted to users
@@ -75,6 +77,11 @@ model AccessPolicy {
 
   provisioningActions ProvisioningAction[]
 
+  // If true, ignore user and group visibility and grant visibility to all users
+  universalVisibility Boolean     @default(false)
+  userVisibility      User[]
+  groupVisibility     UserGroup[]
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -101,6 +108,8 @@ model AccessPolicyApprovalReviewer {
   userId                 String
   AccessPolicyApproval   AccessPolicyApproval @relation(fields: [accessPolicyApprovalId], references: [id])
   accessPolicyApprovalId String
+
+  requiredReviewer Boolean @default(true)
 }
 
 model ProvisioningAction {
