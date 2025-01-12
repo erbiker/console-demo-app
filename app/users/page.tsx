@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -12,6 +13,13 @@ import Link from 'next/link';
 
 export default async function Users() {
   const users = await prisma.user.findMany();
+  const groups = await prisma.userGroup.findMany({
+    include: {
+      _count: {
+        select: { Users: true },
+      },
+    },
+  });
   console.log(users);
 
   return (
@@ -40,6 +48,26 @@ export default async function Users() {
                 </TableCell>
               </TableRow>
             </Link>
+          ))}
+        </TableBody>
+      </Table>
+
+      <Button>Create User</Button>
+
+      <h1>Groups</h1>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Group</TableHead>
+            <TableHead>Members</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {groups.map((group) => (
+            <TableRow key={group.id}>
+              <TableCell>{group.name}</TableCell>
+              <TableCell>{group._count.Users}</TableCell>
+            </TableRow>
           ))}
         </TableBody>
       </Table>
