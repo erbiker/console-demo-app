@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Slack",
+    "url": "https://slack.com",
+    "logo": "https://asset.brandfetch.io/id9arWx3H_/idBpOGO6N_.jpeg"
+  },
+  {
+    "name": "Linear",
+    "url": "https://linear.app",
+    "logo": "https://asset.brandfetch.io/iduDa181eM/idlwljQhgs.jpeg"
+  },
+  {
+    "name": "GitHub",
+    "url": "https://github.com",
+    "logo": "https://asset.brandfetch.io/idZAyF9rlg/id__5yUccv.png"
+  },
+  {
+    "name": "Workday",
+    "url": "https://www.workday.com",
+    "logo": "https://asset.brandfetch.io/id0V-YF4nE/idk3QbqiQL.jpeg"
+  },
+  {
+    "name": "Confluence",
+    "url": "https://www.atlassian.com/software/confluence",
+    "logo": "https://asset.brandfetch.io/idlQIwGMOK/idCRjq-7O_.png"
+  },
+  {
+    "name": "Ramp",
+    "url": "https://ramp.com",
+    "logo": "https://asset.brandfetch.io/idWQ_FWEk6/idYToYIla-.jpeg"
+  },
+  {
+    "name": "Datadog",
+    "url": "https://www.datadoghq.com",
+    "logo": "https://asset.brandfetch.io/idg33VVWFZ/id_htPDJBQ.png"
+  },
+  {
+    "name": "PagerDuty",
+    "url": "https://www.pagerduty.com",
+    "logo": "https://asset.brandfetch.io/idIXh9WELn/idYPNr2AS9.jpeg"
+  },
+  {
+    "name": "Zoom",
+    "url": "https://zoom.us",
+    "logo": "https://asset.brandfetch.io/id3aO4Szj3/idfZvWPDjP.jpeg"
+  },
+  {
+    "name": "Miro",
+    "url": "https://miro.com",
+    "logo": "https://asset.brandfetch.io/idAnDTFapY/idN2G6pGva.jpeg"
+  }
+]

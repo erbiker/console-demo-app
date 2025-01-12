@@ -1,0 +1,123 @@
+[
+  {
+    "email": "sarah.johnson@company.com",
+    "firstName": "Sarah",
+    "lastName": "Johnson",
+    "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
+    "title": "Senior Software Engineer",
+    "department": "Engineering"
+  },
+  {
+    "email": "michael.chen@company.com",
+    "firstName": "Michael",
+    "lastName": "Chen",
+    "avatar": "https://randomuser.me/api/portraits/men/2.jpg",
+    "title": "Product Manager",
+    "department": "Product"
+  },
+  {
+    "email": "emily.davis@company.com",
+    "firstName": "Emily",
+    "lastName": "Davis",
+    "avatar": "https://randomuser.me/api/portraits/women/3.jpg",
+    "title": "UX Designer",
+    "department": "Design"
+  },
+  {
+    "email": "james.wilson@company.com",
+    "firstName": "James",
+    "lastName": "Wilson",
+    "avatar": "https://randomuser.me/api/portraits/men/4.jpg",
+    "title": "Sales Director",
+    "department": "Sales"
+  },
+  {
+    "email": "sophia.garcia@company.com",
+    "firstName": "Sophia",
+    "lastName": "Garcia",
+    "avatar": "https://randomuser.me/api/portraits/women/5.jpg",
+    "title": "HR Manager",
+    "department": "Human Resources"
+  },
+  {
+    "email": "daniel.kim@company.com",
+    "firstName": "Daniel",
+    "lastName": "Kim",
+    "avatar": "https://randomuser.me/api/portraits/men/6.jpg",
+    "title": "Data Scientist",
+    "department": "Data"
+  },
+  {
+    "email": "olivia.brown@company.com",
+    "firstName": "Olivia",
+    "lastName": "Brown",
+    "avatar": "https://randomuser.me/api/portraits/women/7.jpg",
+    "title": "Marketing Manager",
+    "department": "Marketing"
+  },
+  {
+    "id": "clq2345678908",
+    "email": "william.taylor@company.com",
+    "firstName": "William",
+    "lastName": "Taylor",
+    "avatar": "https://randomuser.me/api/portraits/men/8.jpg",
+    "title": "DevOps Engineer",
+    "department": "Engineering"
+  },
+  {
+    "email": "ava.martinez@company.com",
+    "firstName": "Ava",
+    "lastName": "Martinez",
+    "avatar": "https://randomuser.me/api/portraits/women/9.jpg",
+    "title": "Customer Success Manager",
+    "department": "Customer Success"
+  },
+  {
+    "email": "alexander.lee@company.com",
+    "firstName": "Alexander",
+    "lastName": "Lee",
+    "avatar": "https://randomuser.me/api/portraits/men/10.jpg",
+    "title": "Frontend Developer",
+    "department": "Engineering"
+  },
+  {
+    "email": "isabella.wong@company.com",
+    "firstName": "Isabella",
+    "lastName": "Wong",
+    "avatar": "https://randomuser.me/api/portraits/women/11.jpg",
+    "title": "Product Designer",
+    "department": "Design"
+  },
+  {
+    "email": "ethan.patel@company.com",
+    "firstName": "Ethan",
+    "lastName": "Patel",
+    "avatar": "https://randomuser.me/api/portraits/men/12.jpg",
+    "title": "Backend Developer",
+    "department": "Engineering"
+  },
+  {
+    "email": "mia.anderson@company.com",
+    "firstName": "Mia",
+    "lastName": "Anderson",
+    "avatar": "https://randomuser.me/api/portraits/women/13.jpg",
+    "title": "Finance Manager",
+    "department": "Finance"
+  },
+  {
+    "email": "lucas.rodriguez@company.com",
+    "firstName": "Lucas",
+    "lastName": "Rodriguez",
+    "avatar": "https://randomuser.me/api/portraits/men/14.jpg",
+    "title": "Solutions Architect",
+    "department": "Engineering"
+  },
+  {
+    "email": "emma.thompson@company.com",
+    "firstName": "Emma",
+    "lastName": "Thompson",
+    "avatar": "https://randomuser.me/api/portraits/women/15.jpg",
+    "title": "Content Strategist",
+    "department": "Marketing"
+  }
+]

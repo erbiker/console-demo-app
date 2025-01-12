@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Engineering Team",
+    "description": "Core engineering and development team",
+    "note": "Responsible for product development and technical infrastructure"
+  },
+  {
+    "name": "Product Management",
+    "description": "Product strategy and roadmap team",
+    "note": "Oversees product vision and feature prioritization"
+  },
+  {
+    "name": "Marketing",
+    "description": "Marketing and communications team",
+    "note": "Handles brand strategy and marketing campaigns"
+  },
+  {
+    "name": "Sales",
+    "description": "Sales and business development",
+    "note": "Responsible for revenue generation and client relationships"
+  },
+  {
+    "name": "Customer Success",
+    "description": "Customer support and success team",
+    "note": "Ensures customer satisfaction and retention"
+  },
+  {
+    "name": "Finance",
+    "description": "Financial operations team",
+    "note": "Manages company finances and accounting"
+  },
+  {
+    "name": "HR",
+    "description": "Human resources team",
+    "note": "Handles personnel and workplace culture"
+  },
+  {
+    "name": "Legal",
+    "description": "Legal and compliance team",
+    "note": "Manages legal affairs and regulatory compliance"
+  },
+  {
+    "name": "Operations",
+    "description": "Business operations team",
+    "note": "Oversees day-to-day company operations"
+  },
+  {
+    "name": "Design",
+    "description": "UI/UX and design team",
+    "note": "Creates user interfaces and visual designs"
+  }
+]
