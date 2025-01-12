@@ -7,6 +7,7 @@ import { DetailsTab } from './details-tab';
 
 export default async function AccessPolicy({ params }: { params: { id: string } }) {
   const { id: policyId } = await params;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [accessPolicy, apps, users, groups, approvals, grantActions, revokeActions] =
     await Promise.all([
       prisma.accessPolicy.findUnique({
@@ -18,6 +19,7 @@ export default async function AccessPolicy({ params }: { params: { id: string } 
       prisma.userGroup.findMany(),
       prisma.accessPolicyApproval.findMany({
         where: { accessPolicyId: policyId },
+        include: { ApprovalReviewers: { include: { User: true } } },
       }),
       prisma.accessPolicyProvisioningAction.findMany({
         where: {
@@ -53,7 +55,7 @@ export default async function AccessPolicy({ params }: { params: { id: string } 
           <DetailsTab accessPolicy={accessPolicy} allUsers={users} allGroups={groups} />
         </TabsContent>
         <TabsContent value="approvals">
-          <ApprovalsTab accessPolicy={accessPolicy} />
+          <ApprovalsTab policyId={policyId} approvals={approvals} />
         </TabsContent>
       </Tabs>
     </main>

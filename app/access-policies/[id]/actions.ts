@@ -31,3 +31,15 @@ export async function updatePolicy(policyId: string, data: UpdatePolicyData) {
     return { success: false, error };
   }
 }
+
+export async function deleteApproval(approvalId: string, policyId: string) {
+  try {
+    await prisma.accessPolicyApproval.delete({
+      where: { id: approvalId },
+    });
+    revalidatePath(`/access-policies/${policyId}`);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
+}

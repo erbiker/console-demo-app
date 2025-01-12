@@ -6,7 +6,7 @@ import { accessPolicyColumns } from './columns';
 export default async function AccessPolicies() {
   const accessPolicies = await prisma.accessPolicy.findMany({
     include: {
-      app: {
+      App: {
         select: {
           name: true,
           logo: true,

@@ -42,6 +42,8 @@ model UserGroup {
 
   Users                 User[]
   VisibleAccessPolicies AccessPolicy[]
+
+  @@index([name])
 }
 
 // An application whose access is granted to users
@@ -52,7 +54,7 @@ model App {
   url  String?
   logo String?
 
-  Owner   User   @relation(fields: [ownerId], references: [id])
+  Owner   User   @relation(fields: [ownerId], references: [id], onDelete: Restrict)
   ownerId String
 
   createdAt      DateTime       @default(now())
@@ -68,7 +70,7 @@ model AccessPolicy {
   name        String
   description String
 
-  App   App    @relation(fields: [appId], references: [id])
+  App   App    @relation(fields: [appId], references: [id], onDelete: Cascade)
   appId String
 
   Approvals AccessPolicyApproval[]
@@ -97,7 +99,7 @@ model AccessPolicyApproval {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  AccessPolicy      AccessPolicy                   @relation(fields: [accessPolicyId], references: [id])
+  AccessPolicy      AccessPolicy                   @relation(fields: [accessPolicyId], references: [id], onDelete: Cascade)
   accessPolicyId    String
   ApprovalReviewers AccessPolicyApprovalReviewer[]
 
@@ -107,9 +109,9 @@ model AccessPolicyApproval {
 model AccessPolicyApprovalReviewer {
   id String @id @default(cuid())
 
-  user                   User                 @relation(fields: [userId], references: [id])
+  User                   User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                 String
-  AccessPolicyApproval   AccessPolicyApproval @relation(fields: [accessPolicyApprovalId], references: [id])
+  AccessPolicyApproval   AccessPolicyApproval @relation(fields: [accessPolicyApprovalId], references: [id], onDelete: Cascade)
   accessPolicyApprovalId String
 
   requiredReviewer Boolean @default(true)
@@ -121,9 +123,9 @@ model AccessPolicyProvisioningAction {
   createdAt                    DateTime                           @default(now())
   updatedAt                    DateTime                           @updatedAt
   deletedAt                    DateTime?
-  AccessPolicy                 AccessPolicy                       @relation(fields: [accessPolicyId], references: [id])
+  AccessPolicy                 AccessPolicy                       @relation(fields: [accessPolicyId], references: [id], onDelete: Cascade)
   accessPolicyId               String
-  ProvisioningServiceAPICall   ProvisioningServiceAPICall         @relation(fields: [provisioningServiceAPICallId], references: [id])
+  ProvisioningServiceAPICall   ProvisioningServiceAPICall         @relation(fields: [provisioningServiceAPICallId], references: [id], onDelete: Cascade)
   provisioningServiceAPICallId String
   actionType                   AccessPolicyProvisioningActionType
 }
@@ -150,7 +152,7 @@ model ProvisioningServiceAPICall {
 
   ProvisioningActions AccessPolicyProvisioningAction[]
 
-  ProvisioningService   ProvisioningService @relation(fields: [provisioningServiceId], references: [id])
+  ProvisioningService   ProvisioningService @relation(fields: [provisioningServiceId], references: [id], onDelete: Cascade)
   provisioningServiceId String
 
   apiEndpoint    String

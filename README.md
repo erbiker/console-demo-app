@@ -54,4 +54,8 @@ Other shortcuts:
 
   - We could allow for custom lengths, or selecting an access expiration date
 
+- [ ] Allow re-ordering of approval or provisioning steps
+
+  - Right now, the user's only option is to delete and re-add the step
+
 ## Access Policy Structure

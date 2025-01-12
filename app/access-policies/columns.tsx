@@ -5,7 +5,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import Image from 'next/image';
 
 type AccessPolicyWithApp = AccessPolicy & {
-  app: Pick<App, 'name' | 'logo'>;
+  App: Pick<App, 'name' | 'logo'>;
 };
 
 export const accessPolicyColumns: ColumnDef<AccessPolicyWithApp>[] = [
@@ -21,7 +21,7 @@ export const accessPolicyColumns: ColumnDef<AccessPolicyWithApp>[] = [
     accessorKey: 'app',
     header: 'App',
     cell: ({ row }) => {
-      const app = row.original.app;
+      const app = row.original.App;
       return (
         <div className="flex items-center gap-1">
           {app.name}
