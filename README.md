@@ -45,6 +45,11 @@ Primarily, the UI is pretty basic. In a lot of places where it might make sense 
 Other shortcuts:
 
 - [ ] Add pagination to data tables
+
   - In this demo, we're just going to assume we have a manageable amount of data
+
+- [ ] Allow more complex access lengths
+
+  - We could allow for custom lengths, or selecting an access expiration date
 
 ## Access Policy Structure

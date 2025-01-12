@@ -7,6 +7,8 @@ type UpdatePolicyData = {
   name?: string;
   description?: string;
   appId?: string;
+  universalVisibility?: boolean;
+  accessLengthDays?: number;
 };
 
 export async function updatePolicy(policyId: string, data: UpdatePolicyData) {

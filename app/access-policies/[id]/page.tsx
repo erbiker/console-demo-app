@@ -22,7 +22,7 @@ export default async function AccessPolicy({ params }: { params: { id: string } 
       <h1 className="flex items-center gap-6">Policy: {accessPolicy.name}</h1>
       <p>{accessPolicy.description}</p>
       <AppPicker apps={apps} selectedAppId={accessPolicy.app?.id} policyId={accessPolicy.id} />
-      <Tabs defaultValue="details" className="w-[400px]">
+      <Tabs defaultValue="details" className="w-full">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="approvals">Approvals</TabsTrigger>
@@ -34,6 +34,8 @@ export default async function AccessPolicy({ params }: { params: { id: string } 
             policyId={accessPolicy.id}
             initialName={accessPolicy.name}
             initialDescription={accessPolicy.description}
+            initialUniversalVisibility={accessPolicy.universalVisibility}
+            initialAccessLength={accessPolicy.accessLengthDays}
           />
         </TabsContent>
       </Tabs>

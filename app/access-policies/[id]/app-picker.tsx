@@ -38,7 +38,7 @@ export function AppPicker({ apps, selectedAppId, policyId }: AppPickerProps) {
         }}
         disabled={isPending}
       >
-        <SelectTrigger>
+        <SelectTrigger id="app-select">
           <SelectValue placeholder="Select an app" />
         </SelectTrigger>
         <SelectContent>
