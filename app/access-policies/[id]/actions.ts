@@ -8,7 +8,14 @@ type UpdatePolicyData = {
   description?: string;
   appId?: string;
   universalVisibility?: boolean;
-  accessLengthDays?: number;
+  indefiniteAccess?: boolean;
+  accessLengthDays?: number | null;
+  UserVisibility?: {
+    set: { id: string }[];
+  };
+  UserGroupVisibility?: {
+    set: { id: string }[];
+  };
 };
 
 export async function updatePolicy(policyId: string, data: UpdatePolicyData) {

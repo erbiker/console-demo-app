@@ -42,6 +42,8 @@ shadcn-ui is a library I am familiar with and while it's possible a more pre-con
 
 Primarily, the UI is pretty basic. In a lot of places where it might make sense to add additional buttons, navigation, dialogs, tooltips, etc., we've opted to skip them for time and just have simple pages that are single-purpose.
 
+There's also a few CSS issues that we didn't spend time debugging – ripe for cleanup!
+
 Other shortcuts:
 
 - [ ] Add pagination to data tables

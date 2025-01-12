@@ -5,12 +5,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DetailsTab } from './details-tab';
 
 export default async function AccessPolicy({ params }: { params: { id: string } }) {
-  const [accessPolicy, apps] = await Promise.all([
+  const { id: policyId } = await params;
+  const [accessPolicy, apps, users, groups] = await Promise.all([
     prisma.accessPolicy.findUnique({
-      where: { id: params.id },
-      include: { app: true },
+      where: { id: policyId },
+      include: { app: true, UserVisibility: true, UserGroupVisibility: true },
     }),
     prisma.app.findMany(),
+    prisma.user.findMany(),
+    prisma.userGroup.findMany(),
   ]);
 
   if (!accessPolicy) {
@@ -35,7 +38,12 @@ export default async function AccessPolicy({ params }: { params: { id: string } 
             initialName={accessPolicy.name}
             initialDescription={accessPolicy.description}
             initialUniversalVisibility={accessPolicy.universalVisibility}
+            initialIndefiniteAccess={accessPolicy.indefiniteAccess}
             initialAccessLength={accessPolicy.accessLengthDays}
+            initialAccessUsers={accessPolicy.UserVisibility.map((user) => user.id)}
+            initialAccessGroups={accessPolicy.UserGroupVisibility.map((group) => group.id)}
+            allUsers={users}
+            allGroups={groups}
           />
         </TabsContent>
       </Tabs>
