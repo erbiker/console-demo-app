@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-import {nextui} from "@nextui-org/react";
 import animate from "tailwindcss-animate";
 
 
@@ -84,5 +83,5 @@ export default {
   		}
   	}
   },
-  plugins: [animate, nextui()],
+  plugins: [animate],
 } satisfies Config;
