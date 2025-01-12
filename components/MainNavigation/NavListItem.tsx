@@ -1,21 +1,14 @@
-import React from 'react'
-import Link from 'next/link'
-import { cn } from '@/lib/utils'
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 type ListItemProps = {
-  href: string
-  title?: string
-  className?: string
-  children?: React.ReactNode
-}
+  href: string;
+  title?: string;
+  className?: string;
+  children?: React.ReactNode;
+};
 
-const ListItem: React.FC<ListItemProps> = ({
-  href,
-  title,
-  className,
-  children,
-  ...props
-}) => {
+const ListItem: React.FC<ListItemProps> = ({ href, title, className, children, ...props }) => {
   return (
     <Link
       href={href}
@@ -26,11 +19,9 @@ const ListItem: React.FC<ListItemProps> = ({
       {...props}
     >
       <div className="text-sm font-medium leading-none">{title}</div>
-      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-        {children}
-      </p>
+      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{children}</p>
     </Link>
-  )
-}
+  );
+};
 
-export default ListItem
+export default ListItem;
