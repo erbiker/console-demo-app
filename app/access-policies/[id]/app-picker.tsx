@@ -8,10 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
+import { useUpdateToast } from '@/hooks/use-update-toast';
 import { App } from '@prisma/client';
 import { useTransition } from 'react';
-import { updatePolicyApp } from './actions';
+import { updatePolicy } from './actions';
 
 interface AppPickerProps {
   apps: App[];
@@ -21,7 +21,7 @@ interface AppPickerProps {
 
 export function AppPicker({ apps, selectedAppId, policyId }: AppPickerProps) {
   const [isPending, startTransition] = useTransition();
-  const { toast } = useToast();
+  const { showUpdateToast } = useUpdateToast();
 
   return (
     <div className="flex flex-col gap-2">
@@ -32,21 +32,8 @@ export function AppPicker({ apps, selectedAppId, policyId }: AppPickerProps) {
         value={selectedAppId}
         onValueChange={(value) => {
           startTransition(async () => {
-            const result = await updatePolicyApp(policyId!, value);
-            if (result.success) {
-              toast({
-                title: 'Success',
-                description: 'Changes saved',
-                duration: 2000,
-              });
-            } else {
-              toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: 'Failed to save changes',
-                duration: 5000,
-              });
-            }
+            const result = await updatePolicy(policyId!, { appId: value });
+            showUpdateToast(result);
           });
         }}
         disabled={isPending}
