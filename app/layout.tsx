@@ -1,7 +1,7 @@
+import MainNav, { MobileNav } from '@/components/MainNavigation';
+import ContextProviders from '@/components/providers';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import ContextProviders from '@/components/providers';
-import MainNav, { MobileNav } from '@/components/MainNavigation';
 import './globals.css';
 
 const geistSans = Geist({

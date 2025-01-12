@@ -1,16 +1,16 @@
 'use client';
-import Link from 'next/link';
+import { ThemeToggle } from '@/components/MainNavigation';
 import {
   NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuTrigger,
   NavigationMenuContent,
+  NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
+  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-import { ThemeToggle } from '@/components/MainNavigation';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 const MainNav: React.FC<{ className?: string }> = ({ className }) => {
   return (
