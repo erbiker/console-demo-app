@@ -75,12 +75,15 @@ model AccessPolicy {
 
   publishedAt DateTime?
 
-  provisioningActions ProvisioningAction[]
+  AccessPolicyProvisioningActions AccessPolicyProvisioningAction[]
 
   // If true, ignore user and group visibility and grant visibility to all users
   universalVisibility Boolean     @default(false)
-  userVisibility      User[]
-  groupVisibility     UserGroup[]
+  UserVisibility      User[]
+  UserGroupVisibility UserGroup[]
+
+  indefiniteAccess Boolean @default(false)
+  accessLengthDays Int?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -112,12 +115,44 @@ model AccessPolicyApprovalReviewer {
   requiredReviewer Boolean @default(true)
 }
 
-model ProvisioningAction {
+model AccessPolicyProvisioningAction {
   id String @id @default(cuid())
 
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  deletedAt      DateTime?
-  AccessPolicy   AccessPolicy @relation(fields: [accessPolicyId], references: [id])
-  accessPolicyId String
+  createdAt                    DateTime                   @default(now())
+  updatedAt                    DateTime                   @updatedAt
+  deletedAt                    DateTime?
+  AccessPolicy                 AccessPolicy               @relation(fields: [accessPolicyId], references: [id])
+  accessPolicyId               String
+  ProvisioningServiceAPICall   ProvisioningServiceAPICall @relation(fields: [provisioningServiceAPICallId], references: [id])
+  provisioningServiceAPICallId String
+}
+
+model ProvisioningService {
+  id String @id @default(cuid())
+
+  name String
+
+  ProvisioningServiceAPICalls ProvisioningServiceAPICall[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model ProvisioningServiceAPICall {
+  id String @id @default(cuid())
+
+  AccessPolicyProvisioningActions AccessPolicyProvisioningAction[]
+
+  ProvisioningService   ProvisioningService @relation(fields: [provisioningServiceId], references: [id])
+  provisioningServiceId String
+
+  apiEndpoint    String
+  requestMethod  String
+  requestHeaders String
+  requestBody    String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
