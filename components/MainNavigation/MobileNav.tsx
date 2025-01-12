@@ -8,7 +8,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import ListItem from './NavListItem';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 
 const MobileNav: React.FC<{ className?: string }> = ({ className }) => {
@@ -21,7 +20,9 @@ const MobileNav: React.FC<{ className?: string }> = ({ className }) => {
     >
       <Sheet>
         <SheetTrigger className="flex items-center font-extrabold text-2xl">
-          <HamburgerMenuIcon />
+          <div className="mt-4">
+            <HamburgerMenuIcon />
+          </div>
         </SheetTrigger>
         <SheetContent side="top">
           <div className="flex flex-col gap-y-4 mb-4">
@@ -43,10 +44,7 @@ const MobileNav: React.FC<{ className?: string }> = ({ className }) => {
               </AccordionTrigger>
               <AccordionContent>
                 <SheetClose asChild>
-                  <ListItem
-                    href="/access-policies/create"
-                    title="Create an Access Policy"
-                  ></ListItem>
+                  <Link href="/access-policies/create">Create an Access Policy</Link>
                 </SheetClose>
               </AccordionContent>
             </AccordionItem>

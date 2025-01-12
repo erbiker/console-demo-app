@@ -9,7 +9,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-import { NavListItem, ThemeToggle } from '@/components/MainNavigation';
+import { ThemeToggle } from '@/components/MainNavigation';
 import { cn } from '@/lib/utils';
 
 const MainNav: React.FC<{ className?: string }> = ({ className }) => {
@@ -33,10 +33,13 @@ const MainNav: React.FC<{ className?: string }> = ({ className }) => {
               <Link href="/access-policies">Access Policies</Link>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <NavListItem
-                href="/access-policies/create"
-                title="Create an Access Policy"
-              ></NavListItem>
+              <div className="p-4 w-fit">
+                <div>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <Link href="/access-policies/create">Create an Access Policy</Link>
+                  </NavigationMenuLink>
+                </div>
+              </div>
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>

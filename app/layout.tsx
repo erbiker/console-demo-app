@@ -26,7 +26,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-r from-zinc-50 to-zinc-300 text-black`}
+      >
         <ContextProviders>
           <MobileNav className="md:hidden" />
           <MainNav className="hidden md:flex" />

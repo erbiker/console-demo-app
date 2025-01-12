@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import animate from 'tailwindcss-animate';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
   darkMode: ['class'],
@@ -12,8 +13,6 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
         // zinc
         primary: {
           DEFAULT: '#71717a',
@@ -57,6 +56,11 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+    },
+    screens: {
+      xs: '428px',
+      ...defaultTheme.screens,
+      '2xl': '1400px',
     },
   },
   plugins: [animate],
