@@ -21,10 +21,10 @@ model User {
   updatedAt  DateTime  @updatedAt
   deletedAt  DateTime?
 
-  UserGroups                   UserGroup[]
-  OwnedApps                    App[]
-  AccessPolicyApprovalReviewer AccessPolicyApprovalReviewer[]
-  VisibleAccessPolicies        AccessPolicy[]
+  userGroups                   UserGroup[]
+  ownedApps                    App[]
+  accessPolicyApprovalReviewer AccessPolicyApprovalReviewer[]
+  visibleAccessPolicies        AccessPolicy[]
 
   @@index([email])
 }
@@ -40,8 +40,8 @@ model UserGroup {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  Users                 User[]
-  VisibleAccessPolicies AccessPolicy[]
+  users                 User[]
+  visibleAccessPolicies AccessPolicy[]
 }
 
 // An application whose access is granted to users
@@ -55,10 +55,10 @@ model App {
   owner   User   @relation(fields: [ownerId], references: [id])
   ownerId String
 
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  deletedAt    DateTime?
-  AccessPolicy AccessPolicy[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  deletedAt      DateTime?
+  accessPolicies AccessPolicy[]
 }
 
 // A policy that specifies how to grant access to an app
@@ -75,7 +75,7 @@ model AccessPolicy {
 
   publishedAt DateTime?
 
-  AccessPolicyProvisioningActions AccessPolicyProvisioningAction[]
+  provisioningActions AccessPolicyProvisioningAction[]
 
   // If true, ignore user and group visibility and grant visibility to all users
   universalVisibility Boolean     @default(false)
@@ -97,9 +97,9 @@ model AccessPolicyApproval {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  AccessPolicy                 AccessPolicy                   @relation(fields: [accessPolicyId], references: [id])
-  accessPolicyId               String
-  AccessPolicyApprovalReviewer AccessPolicyApprovalReviewer[]
+  accessPolicy      AccessPolicy                   @relation(fields: [accessPolicyId], references: [id])
+  accessPolicyId    String
+  approvalReviewers AccessPolicyApprovalReviewer[]
 
   priority Int
 }
@@ -109,7 +109,7 @@ model AccessPolicyApprovalReviewer {
 
   user                   User                 @relation(fields: [userId], references: [id])
   userId                 String
-  AccessPolicyApproval   AccessPolicyApproval @relation(fields: [accessPolicyApprovalId], references: [id])
+  accessPolicyApproval   AccessPolicyApproval @relation(fields: [accessPolicyApprovalId], references: [id])
   accessPolicyApprovalId String
 
   requiredReviewer Boolean @default(true)
@@ -121,9 +121,9 @@ model AccessPolicyProvisioningAction {
   createdAt                    DateTime                   @default(now())
   updatedAt                    DateTime                   @updatedAt
   deletedAt                    DateTime?
-  AccessPolicy                 AccessPolicy               @relation(fields: [accessPolicyId], references: [id])
+  accessPolicy                 AccessPolicy               @relation(fields: [accessPolicyId], references: [id])
   accessPolicyId               String
-  ProvisioningServiceAPICall   ProvisioningServiceAPICall @relation(fields: [provisioningServiceAPICallId], references: [id])
+  provisioningServiceAPICall   ProvisioningServiceAPICall @relation(fields: [provisioningServiceAPICallId], references: [id])
   provisioningServiceAPICallId String
 }
 
@@ -132,7 +132,7 @@ model ProvisioningService {
 
   name String
 
-  ProvisioningServiceAPICalls ProvisioningServiceAPICall[]
+  provisioningServiceAPICalls ProvisioningServiceAPICall[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -142,9 +142,9 @@ model ProvisioningService {
 model ProvisioningServiceAPICall {
   id String @id @default(cuid())
 
-  AccessPolicyProvisioningActions AccessPolicyProvisioningAction[]
+  provisioningActions AccessPolicyProvisioningAction[]
 
-  ProvisioningService   ProvisioningService @relation(fields: [provisioningServiceId], references: [id])
+  provisioningService   ProvisioningService @relation(fields: [provisioningServiceId], references: [id])
   provisioningServiceId String
 
   apiEndpoint    String

@@ -1,5 +1,6 @@
 import MainNav, { MobileNav } from '@/components/MainNavigation';
 import ContextProviders from '@/components/providers';
+import { Toaster } from '@/components/ui/toaster';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -31,6 +32,7 @@ export default function RootLayout({
           <MobileNav className="md:hidden" />
           <MainNav className="hidden md:flex" />
           {children}
+          <Toaster />
         </ContextProviders>
       </body>
     </html>
