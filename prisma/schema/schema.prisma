@@ -32,7 +32,7 @@ model User {
 // An access group granting various permissions to users
 model UserGroup {
   id          String  @id @default(cuid())
-  name        String?
+  name        String
   description String?
   note        String?
 
@@ -115,9 +115,9 @@ model AccessPolicyApprovalReviewer {
 model ProvisioningAction {
   id String @id @default(cuid())
 
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
-  AccessPolicy   AccessPolicy? @relation(fields: [accessPolicyId], references: [id])
-  accessPolicyId String?
+  AccessPolicy   AccessPolicy @relation(fields: [accessPolicyId], references: [id])
+  accessPolicyId String
 }
