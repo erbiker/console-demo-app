@@ -22,7 +22,7 @@ import { deleteApproval, updateProvisioningAction } from './actions';
 
 type Props = {
   provisioningAction: AccessPolicyProvisioningAction & {
-    ProvisioningServiceAPICall: ProvisioningServiceAPICall;
+    ProvisioningServiceAPICall: ProvisioningServiceAPICall | null;
   };
   index: number;
   policyId: string;

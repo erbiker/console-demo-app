@@ -114,7 +114,7 @@ export function DetailsTab({ accessPolicy, allUsers, allGroups }: DetailsTabProp
                 }}
                 placeholder="Select users"
                 variant="inverted"
-                className="bg-zinc-400 hover:bg-zinc-400/80 dark:bg-zinc-800 dark:hover:bg-zinc-800/80"
+                className="bg-zinc-400 hover:bg-zinc-400/80 dark:bg-zinc-800 dark:hover:bg-zinc-800/80 text-black dark:text-white"
               />
             </div>
             <div className="space-y-1 p-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-md">

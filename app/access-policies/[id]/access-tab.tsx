@@ -14,7 +14,7 @@ import { addProvisioningAction } from './actions';
 type Props = {
   policyId: string;
   provisioningActions: (AccessPolicyProvisioningAction & {
-    ProvisioningServiceAPICall: ProvisioningServiceAPICall;
+    ProvisioningServiceAPICall: ProvisioningServiceAPICall | null;
   })[];
   allProvisioningServices: ProvisioningService[];
   allProvisioningServiceAPICalls: ProvisioningServiceAPICall[];
