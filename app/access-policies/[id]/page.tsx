@@ -1,9 +1,13 @@
 import prisma from '@/lib/prisma';
 import { AppPicker } from './app-picker';
 
+import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
 import { ApprovalsTab } from './approvals-tab';
 import { DetailsTab } from './details-tab';
+import { PolicyFooter } from './policy-footer';
 
 export default async function AccessPolicy({ params }: { params: { id: string } }) {
   const { id: policyId } = await params;
@@ -42,7 +46,24 @@ export default async function AccessPolicy({ params }: { params: { id: string } 
   return (
     <main>
       <h1 className="flex items-center gap-6">Policy: {accessPolicy.name}</h1>
-      <p>{accessPolicy.description}</p>
+      <div className="flex flex-row justify-between items-center">
+        <p>{accessPolicy.description}</p>
+        <div className="flex gap-2 justify-end items-center">
+          <Label className="text-sm" htmlFor="status">
+            Status:
+          </Label>
+          <Badge
+            id="status"
+            className={cn(
+              `${accessPolicy.publishedAt ? 'bg-green-500 dark:bg-green-700' : 'bg-yellow-500 dark:bg-yellow-700'}`,
+              'text-black dark:text-white py-1 px-2text-sm',
+            )}
+            variant="outline"
+          >
+            {accessPolicy.publishedAt ? 'Published' : 'Draft'}
+          </Badge>
+        </div>
+      </div>
       <AppPicker apps={apps} selectedAppId={accessPolicy.App?.id} policyId={accessPolicy.id} />
       <Tabs defaultValue="details" className="w-full">
         <TabsList className="grid w-full grid-cols-4">
@@ -58,6 +79,7 @@ export default async function AccessPolicy({ params }: { params: { id: string } 
           <ApprovalsTab policyId={policyId} approvals={approvals} allUsers={users} />
         </TabsContent>
       </Tabs>
+      <PolicyFooter accessPolicy={accessPolicy} />
     </main>
   );
 }

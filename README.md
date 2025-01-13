@@ -42,8 +42,6 @@ shadcn-ui is a library I am familiar with and while it's possible a more pre-con
 
 Primarily, the UI is pretty basic. In a lot of places where it might make sense to add additional buttons, navigation, dialogs, tooltips, etc., we've opted to skip them for time and just have simple pages that are single-purpose.
 
-There's also a few CSS issues that we didn't spend time debugging – ripe for cleanup!
-
 Other shortcuts:
 
 - [ ] Add pagination to data tables
@@ -57,5 +55,9 @@ Other shortcuts:
 - [ ] Allow re-ordering of approval or provisioning steps
 
   - Right now, the user's only option is to delete and re-add the step
+
+- [ ] Allow for approvals to be assigned to a Group rather than just Users
+
+  - Some ux research would be needed to see if this is desired or how it would be implemented (would one User in the group need to approve, or would we specify a number of users that need to approve?)
 
 ## Access Policy Structure

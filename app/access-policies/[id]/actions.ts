@@ -81,3 +81,41 @@ export async function updateApproval(
     return { success: false, error };
   }
 }
+
+export async function deletePolicy(policyId: string) {
+  try {
+    await prisma.accessPolicy.delete({
+      where: { id: policyId },
+    });
+    revalidatePath('/access-policies');
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+
+export async function publishPolicy(policyId: string) {
+  try {
+    await prisma.accessPolicy.update({
+      where: { id: policyId },
+      data: { publishedAt: new Date() },
+    });
+    revalidatePath(`/access-policies/${policyId}`);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+
+export async function unpublishPolicy(policyId: string) {
+  try {
+    await prisma.accessPolicy.update({
+      where: { id: policyId },
+      data: { publishedAt: null },
+    });
+    revalidatePath(`/access-policies/${policyId}`);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
