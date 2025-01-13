@@ -68,6 +68,10 @@ Other items to consider:
 
   - We're doing some validation on publish, but we're not locking the policy after publish so there is the posiblity to edit the policy into a bad state while it is live.
 
+- [ ] Add management pages for provisioning providers and api calls
+
+  - In this app, all providers and api calls are provided. This reflects the real world where we've likely build connectors for specific common providers. However, there would still need to be some individual configuration of things like authentication for each provider, and we'd also want to allow for the addition of custom providers and api calls for services we don't yet support out of the box.
+
 ## Access Policy Structure
 
 This application allows us to create access policies – on the other end, users can request access to a resource via the policies. Policies are avaialbe to users based on the visibilty set in the policy.
