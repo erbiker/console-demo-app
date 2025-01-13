@@ -148,7 +148,9 @@ model ProvisioningService {
 }
 
 model ProvisioningServiceAPICall {
-  id String @id @default(cuid())
+  id          String  @id @default(cuid())
+  name        String
+  description String?
 
   ProvisioningActions AccessPolicyProvisioningAction[]
 

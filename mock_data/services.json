@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Okta",
+    "apiKey": "1234567890",
+    "actions": [
+      {
+        "name": "Add User to Group",
+        "description": "Add a user to a group in Okta",
+        "apiEndpoint": "https://api.okta.com/addUserToGroup",
+        "requestMethod": "POST",
+        "requestHeaders": "Authorization: Bearer {token}",
+        "requestBody": "{\"groupId\": \"{groupId}\", \"userId\": \"{userId}\"}"
+      },
+      {
+        "name": "Remove User from Group",
+        "description": "Remove a user from a group in Okta",
+        "apiEndpoint": "https://api.okta.com/removeUserFromGroup",
+        "requestMethod": "POST",
+        "requestHeaders": "Authorization: Bearer {token}",
+        "requestBody": "{\"groupId\": \"{groupId}\", \"userId\": \"{userId}\"}"
+      }
+    ]
+  }
+]

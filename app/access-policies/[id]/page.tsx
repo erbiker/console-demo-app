@@ -39,11 +39,17 @@ export default async function AccessPolicy({ params }: { params: { id: string } 
         accessPolicyId: policyId,
         actionType: 'GRANT_ACCESS',
       },
+      include: {
+        ProvisioningServiceAPICall: true,
+      },
     }),
     prisma.accessPolicyProvisioningAction.findMany({
       where: {
         accessPolicyId: policyId,
         actionType: 'REVOKE_ACCESS',
+      },
+      include: {
+        ProvisioningServiceAPICall: true,
       },
     }),
     prisma.provisioningService.findMany(),

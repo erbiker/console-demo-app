@@ -29,6 +29,10 @@ type UpdateApprovalData = {
   };
 };
 
+type UpdateProvisioningActionData = {
+  provisioningServiceAPICallId?: string;
+};
+
 export async function updatePolicy(policyId: string, data: UpdatePolicyData) {
   console.log(data);
   try {
@@ -225,6 +229,20 @@ export async function addProvisioningAction(
         actionType,
       },
     });
+    revalidatePath(`/access-policies/${policyId}`);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+
+export async function updateProvisioningAction(
+  actionId: string,
+  data: UpdateProvisioningActionData,
+  policyId: string,
+) {
+  try {
+    await prisma.accessPolicyProvisioningAction.update({ where: { id: actionId }, data });
     revalidatePath(`/access-policies/${policyId}`);
     return { success: true };
   } catch (error) {

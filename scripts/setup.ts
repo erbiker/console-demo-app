@@ -4,6 +4,7 @@ import { execSync } from 'child_process';
 import { prompt } from 'enquirer';
 import apps from '../mock_data/apps.json';
 import groups from '../mock_data/groups.json';
+import services from '../mock_data/services.json';
 import users from '../mock_data/users.json';
 
 const prisma = new PrismaClient();
@@ -94,9 +95,45 @@ async function seedDatabase() {
     ),
   );
 
+  // Create provisioning services and their API calls
+  const createdServices = await Promise.all(
+    services.map(async (service) => {
+      const createdService = await prisma.provisioningService.create({
+        data: {
+          name: service.name,
+        },
+      });
+
+      // Create API calls for this service
+      const apiCalls = await Promise.all(
+        service.actions.map((action) =>
+          prisma.provisioningServiceAPICall.create({
+            data: {
+              name: action.name,
+              description: action.description,
+              provisioningServiceId: createdService.id,
+              apiEndpoint: action.apiEndpoint,
+              requestMethod: action.requestMethod,
+              requestHeaders: action.requestHeaders,
+              requestBody: action.requestBody,
+            },
+          }),
+        ),
+      );
+
+      return { service: createdService, apiCalls };
+    }),
+  );
+
   console.log(`✅ Created ${createdUsers.length} users`);
   console.log(`✅ Created ${createdGroups.length} groups`);
   console.log(`✅ Created ${createdApps.length} apps`);
+  console.log(
+    `✅ Created ${createdServices.length} provisioning services with ${createdServices.reduce(
+      (sum, s) => sum + s.apiCalls.length,
+      0,
+    )} API calls`,
+  );
 }
 
 async function main() {

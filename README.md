@@ -69,3 +69,27 @@ Other items to consider:
   - We're doing some validation on publish, but we're not locking the policy after publish so there is the posiblity to edit the policy into a bad state while it is live.
 
 ## Access Policy Structure
+
+This application allows us to create access policies – on the other end, users can request access to a resource via the policies. Policies are avaialbe to users based on the visibilty set in the policy.
+
+When a user requests access, we'll create a AccessRequest – this will link to the policy and the requesting user. If approvals are required, we'll create an AccessRequestApproval. Once approved, the agent will continue to the provision steps as defined in the policy.
+
+## Provisioning actions
+
+These are not defined in this application, though we could allow the addition of managing provisioning actions in the future. You can think of the provisioning providers and the actions as the integrations and specific api calls we can make.
+
+On the provider level, we can define base level information like authentication that the agent will use when interfacting with that specific api.
+
+On the api call level, we can define the specific request method, headers, body, and response.
+
+It would be expected that the majority of the providers and api calls would be defined on our end, but we could allow for the addition of custom providers and api calls.
+
+### Complexity Explosion
+
+Implementing beyond the basics for the provisioning actions involves a lot of complexity, beyond the scope of this demo.
+
+In many of these steps, during the definition of the action we'd be needing to make live calls to the api of the providers themselves just to have the data we need to define the action.
+
+For example, in our demo Okta provider, the two api calls we've defined are about adding and removing users from okta groups. In order to know what groups exist, we'd need to make a call to the Okta API to get the groups. Alternatively we could be syncing the groups to our own database.
+
+However, if you then think a little further to the various providers, and the data that needs to be fetched, and how we fetch that, the data model becomes a lot more complex. At some level it feels like we're essentially building a IPaaS platform, and that's not trivial. Given that this app is a demo that won't actually be using any of these providers or api calls, we're going to leave that complexity alone.

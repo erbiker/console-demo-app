@@ -13,7 +13,9 @@ import { addProvisioningAction } from './actions';
 
 type Props = {
   policyId: string;
-  provisioningActions: AccessPolicyProvisioningAction[];
+  provisioningActions: (AccessPolicyProvisioningAction & {
+    ProvisioningServiceAPICall: ProvisioningServiceAPICall;
+  })[];
   allProvisioningServices: ProvisioningService[];
   allProvisioningServiceAPICalls: ProvisioningServiceAPICall[];
   tab: 'Grant' | 'Revoke';
