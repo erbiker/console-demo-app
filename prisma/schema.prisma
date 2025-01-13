@@ -125,8 +125,8 @@ model AccessPolicyProvisioningAction {
   deletedAt                    DateTime?
   AccessPolicy                 AccessPolicy                       @relation(fields: [accessPolicyId], references: [id], onDelete: Cascade)
   accessPolicyId               String
-  ProvisioningServiceAPICall   ProvisioningServiceAPICall         @relation(fields: [provisioningServiceAPICallId], references: [id], onDelete: Cascade)
-  provisioningServiceAPICallId String
+  ProvisioningServiceAPICall   ProvisioningServiceAPICall?        @relation(fields: [provisioningServiceAPICallId], references: [id], onDelete: Cascade)
+  provisioningServiceAPICallId String?
   actionType                   AccessPolicyProvisioningActionType
 }
 

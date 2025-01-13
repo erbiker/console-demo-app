@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { AccessPolicyProvisioningActionType } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
 type UpdatePolicyData = {
@@ -122,6 +123,7 @@ export async function publishPolicy(policyId: string) {
       ProvisioningActions: {
         select: {
           actionType: true,
+          provisioningServiceAPICallId: true,
         },
       },
     },
@@ -176,6 +178,13 @@ export async function publishPolicy(policyId: string) {
     errors.push('Policy with an access expiration must have at least one revoke action');
   }
 
+  if (
+    grantActions.some((action) => !action.provisioningServiceAPICallId) ||
+    revokeActions.some((action) => !action.provisioningServiceAPICallId)
+  ) {
+    errors.push('All access actions must have a provisioning service');
+  }
+
   if (errors.length > 0) {
     return { success: false, errors };
   }
@@ -197,6 +206,24 @@ export async function unpublishPolicy(policyId: string) {
     await prisma.accessPolicy.update({
       where: { id: policyId },
       data: { publishedAt: null },
+    });
+    revalidatePath(`/access-policies/${policyId}`);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+
+export async function addProvisioningAction(
+  policyId: string,
+  actionType: AccessPolicyProvisioningActionType,
+) {
+  try {
+    await prisma.accessPolicyProvisioningAction.create({
+      data: {
+        accessPolicyId: policyId,
+        actionType,
+      },
     });
     revalidatePath(`/access-policies/${policyId}`);
     return { success: true };

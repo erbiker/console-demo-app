@@ -1,43 +1,54 @@
 import prisma from '@/lib/prisma';
-import { AppPicker } from './app-picker';
 
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
+import { AccessTab } from './access-tab';
+import { AppPicker } from './app-picker';
 import { ApprovalsTab } from './approvals-tab';
 import { DetailsTab } from './details-tab';
 import { PolicyFooter } from './policy-footer';
 
 export default async function AccessPolicy({ params }: { params: { id: string } }) {
   const { id: policyId } = await params;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [accessPolicy, apps, users, groups, approvals, grantActions, revokeActions] =
-    await Promise.all([
-      prisma.accessPolicy.findUnique({
-        where: { id: policyId },
-        include: { App: true, UserVisibility: true, UserGroupVisibility: true },
-      }),
-      prisma.app.findMany(),
-      prisma.user.findMany(),
-      prisma.userGroup.findMany(),
-      prisma.accessPolicyApproval.findMany({
-        where: { accessPolicyId: policyId },
-        include: { ApprovalReviewers: { include: { User: true } } },
-      }),
-      prisma.accessPolicyProvisioningAction.findMany({
-        where: {
-          accessPolicyId: policyId,
-          actionType: 'GRANT_ACCESS',
-        },
-      }),
-      prisma.accessPolicyProvisioningAction.findMany({
-        where: {
-          accessPolicyId: policyId,
-          actionType: 'REVOKE_ACCESS',
-        },
-      }),
-    ]);
+  const [
+    accessPolicy,
+    apps,
+    users,
+    groups,
+    approvals,
+    grantActions,
+    revokeActions,
+    provisioningServices,
+    provisioningServiceAPICalls,
+  ] = await Promise.all([
+    prisma.accessPolicy.findUnique({
+      where: { id: policyId },
+      include: { App: true, UserVisibility: true, UserGroupVisibility: true },
+    }),
+    prisma.app.findMany(),
+    prisma.user.findMany(),
+    prisma.userGroup.findMany(),
+    prisma.accessPolicyApproval.findMany({
+      where: { accessPolicyId: policyId },
+      include: { ApprovalReviewers: { include: { User: true } } },
+    }),
+    prisma.accessPolicyProvisioningAction.findMany({
+      where: {
+        accessPolicyId: policyId,
+        actionType: 'GRANT_ACCESS',
+      },
+    }),
+    prisma.accessPolicyProvisioningAction.findMany({
+      where: {
+        accessPolicyId: policyId,
+        actionType: 'REVOKE_ACCESS',
+      },
+    }),
+    prisma.provisioningService.findMany(),
+    prisma.provisioningServiceAPICall.findMany(),
+  ]);
 
   if (!accessPolicy) {
     return <div>Policy not found</div>;
@@ -77,6 +88,24 @@ export default async function AccessPolicy({ params }: { params: { id: string } 
         </TabsContent>
         <TabsContent value="approvals">
           <ApprovalsTab policyId={policyId} approvals={approvals} allUsers={users} />
+        </TabsContent>
+        <TabsContent value="grant">
+          <AccessTab
+            policyId={policyId}
+            provisioningActions={grantActions}
+            allProvisioningServices={provisioningServices}
+            allProvisioningServiceAPICalls={provisioningServiceAPICalls}
+            tab="Grant"
+          />
+        </TabsContent>
+        <TabsContent value="revoke">
+          <AccessTab
+            policyId={policyId}
+            provisioningActions={revokeActions}
+            allProvisioningServices={provisioningServices}
+            allProvisioningServiceAPICalls={provisioningServiceAPICalls}
+            tab="Revoke"
+          />
         </TabsContent>
       </Tabs>
       <PolicyFooter accessPolicy={accessPolicy} />
