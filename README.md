@@ -74,6 +74,8 @@ This application allows us to create access policies – on the other end, users
 
 When a user requests access, we'll create a AccessRequest – this will link to the policy and the requesting user. If approvals are required, we'll create an AccessRequestApproval. Once approved, the agent will continue to the provision steps as defined in the policy.
 
+Policies are created as drafts and incomplete by default. They can be published once all the necessary information is provided. Draft policies are not visible to any users or the agent. Policies can be unpublished even after AccessRequests have been created. This is a good example of where the base approach of just cascading deletes would not be ideal – we like don't ever want to actually delete a policy once it has been used, and only use the deleted date to determine if it should be retrieved in the app.
+
 ## Provisioning actions
 
 These are not defined in this application, though we could allow the addition of managing provisioning actions in the future. You can think of the provisioning providers and the actions as the integrations and specific api calls we can make.
@@ -87,6 +89,8 @@ It would be expected that the majority of the providers and api calls would be d
 ### Complexity Explosion
 
 Implementing beyond the basics for the provisioning actions involves a lot of complexity, beyond the scope of this demo.
+
+My initial approach and deisgn in the schema was a naive one where I just put a fixed definition for each api call. You could imagine that there might be templated values that those definitions are looking for in order to make the call on the right resource (like a user id for the specific user we're trying to grant access for). When creating a policy definition, we could then provide the values for those templated values (or where to get them from the request). However, to make that UX work, it becomes quite complex – you can't expect the person creating the policy to want to write some complicated json to define the templated values, if they even had the values to begin with.
 
 In many of these steps, during the definition of the action we'd be needing to make live calls to the api of the providers themselves just to have the data we need to define the action.
 
