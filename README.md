@@ -34,9 +34,9 @@ Given the SQLite database is hosted within the project, deploying to a serverles
 - Prisma + SQLite
 - shadcn/ui
 
-Next/Prisma was chose to be as quick as possible to get a full-stack app up and running without needing to create and manage multiple services.
+Next/Prisma was chose to be as quick as possible to get a full-stack app up and running without needing to create and manage multiple services. I had not used Prisma before, but with a lot of documentation for integrating with Next and with support for SQLite, it was a quick choice.
 
-shadcn-ui is a library I am familiar with and while it's possible a more pre-confiugred component library like material-ui or next-ui would have been slightly faster,
+shadcn-ui is a library I am familiar with and while it's possible a more pre-confiugred component library like material-ui or next-ui would have been slightly faster, I wanted to use something that in theory would be more flexible and easier to customize.
 
 ### Shortcuts/Todos:
 
