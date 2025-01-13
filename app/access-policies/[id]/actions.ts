@@ -33,8 +33,26 @@ type UpdateProvisioningActionData = {
   provisioningServiceAPICallId?: string;
 };
 
-export async function updatePolicy(policyId: string, data: UpdatePolicyData) {
+type CreatePolicyData = {
+  name: string;
+  description: string;
+  appId: string;
+};
+
+export async function createPolicy(data: CreatePolicyData) {
   console.log(data);
+  try {
+    const policy = await prisma.accessPolicy.create({
+      data,
+    });
+    revalidatePath('/access-policies');
+    return { success: true, policy };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+
+export async function updatePolicy(policyId: string, data: UpdatePolicyData) {
   try {
     await prisma.accessPolicy.update({
       where: { id: policyId },

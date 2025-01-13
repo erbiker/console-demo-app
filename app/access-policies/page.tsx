@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import prisma from '@/lib/prisma';
+import Link from 'next/link';
 import { accessPolicyColumns } from './columns';
 
 export default async function AccessPolicies() {
@@ -20,7 +21,9 @@ export default async function AccessPolicies() {
     <main>
       <h1>Access Policies</h1>
       <DataTable columns={accessPolicyColumns} data={accessPolicies} />
-      <Button>Create Access Policy</Button>
+      <Link href="/access-policies/create">
+        <Button>Create Access Policy</Button>
+      </Link>
     </main>
   );
 }
