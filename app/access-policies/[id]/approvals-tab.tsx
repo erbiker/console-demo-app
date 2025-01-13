@@ -5,7 +5,6 @@ import { MultiSelect } from '@/components/ui/multi-select';
 import { useUpdateToast } from '@/hooks/use-update-toast';
 import { AccessPolicyApproval, AccessPolicyApprovalReviewer, User } from '@prisma/client';
 import { TrashIcon } from '@radix-ui/react-icons';
-import { useTransition } from 'react';
 import { addApproval, deleteApproval, updateApproval } from './actions';
 
 type Props = {
@@ -18,8 +17,6 @@ type Props = {
 
 export function ApprovalsTab({ policyId, approvals, allUsers }: Props) {
   const { showUpdateToast } = useUpdateToast();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isPending, startTransition] = useTransition();
 
   return (
     <Card>
@@ -65,20 +62,19 @@ export function ApprovalsTab({ policyId, approvals, allUsers }: Props) {
                     label: user.firstName + ' ' + user.lastName,
                     value: user.id,
                   }))}
-                  onValueChange={(values) => {
-                    console.log(values);
-                    startTransition(async () => {
-                      const result = await updateApproval(
-                        approval.id,
-                        {
-                          ApprovalReviewers: {
-                            set: values.map((id) => ({ id })),
-                          },
+                  defaultValue={approval.ApprovalReviewers.map((reviewer) => reviewer.userId)}
+                  onValueChange={async (values) => {
+                    const result = await updateApproval(
+                      approval.id,
+                      {
+                        ApprovalReviewers: {
+                          deleteMany: {},
+                          create: values.map((id) => ({ userId: id })),
                         },
-                        policyId,
-                      );
-                      showUpdateToast(result);
-                    });
+                      },
+                      policyId,
+                    );
+                    showUpdateToast(result);
                   }}
                   placeholder="Select approvers"
                   variant="inverted"

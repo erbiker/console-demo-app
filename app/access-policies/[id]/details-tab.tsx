@@ -17,7 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useUpdateToast } from '@/hooks/use-update-toast';
 import { AccessPolicy, User, UserGroup } from '@prisma/client';
-import { useEffect, useState, useTransition } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 import { updatePolicy } from './actions';
 
 interface DetailsTabProps {
@@ -30,23 +30,10 @@ interface DetailsTabProps {
 }
 
 export function DetailsTab({ accessPolicy, allUsers, allGroups }: DetailsTabProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isPending, startTransition] = useTransition();
   const { showUpdateToast } = useUpdateToast();
 
   const [name, setName] = useState(accessPolicy.name);
   const [description, setDescription] = useState(accessPolicy.description ?? '');
-  const [universalVisibility, setUniversalVisibility] = useState(accessPolicy.universalVisibility);
-  const [indefiniteAccess, setIndefiniteAccess] = useState(accessPolicy.indefiniteAccess);
-  const [accessLength, setAccessLength] = useState<number | null>(accessPolicy.accessLengthDays);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [accessUsers, setAccessUsers] = useState(
-    accessPolicy.UserVisibility.map((user) => user.id),
-  );
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [accessGroups, setAccessGroups] = useState(
-    accessPolicy.UserGroupVisibility.map((group) => group.id),
-  );
 
   const debouncedName = useDebounce(name, 1000);
   const debouncedDescription = useDebounce(description, 1000);
@@ -55,7 +42,6 @@ export function DetailsTab({ accessPolicy, allUsers, allGroups }: DetailsTabProp
     if (debouncedName === accessPolicy.name) {
       return;
     }
-
     startTransition(async () => {
       const result = await updatePolicy(accessPolicy.id, { name: debouncedName });
       showUpdateToast(result);
@@ -66,7 +52,6 @@ export function DetailsTab({ accessPolicy, allUsers, allGroups }: DetailsTabProp
     if (debouncedDescription === accessPolicy.description) {
       return;
     }
-
     startTransition(async () => {
       const result = await updatePolicy(accessPolicy.id, { description: debouncedDescription });
       showUpdateToast(result);
@@ -97,19 +82,16 @@ export function DetailsTab({ accessPolicy, allUsers, allGroups }: DetailsTabProp
             Visible to all users
           </Label>
           <Switch
-            checked={universalVisibility}
-            onCheckedChange={(checked) => {
-              setUniversalVisibility(checked);
-              startTransition(async () => {
-                const result = await updatePolicy(accessPolicy.id, {
-                  universalVisibility: checked,
-                });
-                showUpdateToast(result);
+            checked={accessPolicy.universalVisibility}
+            onCheckedChange={async (checked) => {
+              const result = await updatePolicy(accessPolicy.id, {
+                universalVisibility: checked,
               });
+              showUpdateToast(result);
             }}
           />
         </div>
-        {!universalVisibility && (
+        {!accessPolicy.universalVisibility && (
           <div className="flex flex-col gap-2">
             <div className="space-y-1 p-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-md">
               <Label htmlFor="accessUsers" className="text-sm font-semibold">
@@ -120,18 +102,15 @@ export function DetailsTab({ accessPolicy, allUsers, allGroups }: DetailsTabProp
                   label: user.firstName + ' ' + user.lastName,
                   value: user.id,
                 }))}
-                defaultValue={accessUsers}
-                onValueChange={(values) => {
-                  setAccessUsers(values);
-                  startTransition(async () => {
-                    const result = await updatePolicy(accessPolicy.id, {
-                      UserVisibility: {
-                        set: [],
-                        connect: values.map((id) => ({ id })),
-                      },
-                    });
-                    showUpdateToast(result);
+                defaultValue={accessPolicy.UserVisibility.map((user) => user.id)}
+                onValueChange={async (values) => {
+                  const result = await updatePolicy(accessPolicy.id, {
+                    UserVisibility: {
+                      set: [],
+                      connect: values.map((id) => ({ id })),
+                    },
                   });
+                  showUpdateToast(result);
                 }}
                 placeholder="Select users"
                 variant="inverted"
@@ -147,18 +126,15 @@ export function DetailsTab({ accessPolicy, allUsers, allGroups }: DetailsTabProp
                   label: group.name,
                   value: group.id,
                 }))}
-                defaultValue={accessGroups}
-                onValueChange={(values) => {
-                  setAccessGroups(values);
-                  startTransition(async () => {
-                    const result = await updatePolicy(accessPolicy.id, {
-                      UserGroupVisibility: {
-                        set: [],
-                        connect: values.map((id) => ({ id })),
-                      },
-                    });
-                    showUpdateToast(result);
+                defaultValue={accessPolicy.UserGroupVisibility.map((group) => group.id)}
+                onValueChange={async (values) => {
+                  const result = await updatePolicy(accessPolicy.id, {
+                    UserGroupVisibility: {
+                      set: [],
+                      connect: values.map((id) => ({ id })),
+                    },
                   });
+                  showUpdateToast(result);
                 }}
                 placeholder="Select groups"
                 variant="inverted"
@@ -172,34 +148,28 @@ export function DetailsTab({ accessPolicy, allUsers, allGroups }: DetailsTabProp
             Indefinite Access
           </Label>
           <Switch
-            checked={indefiniteAccess}
-            onCheckedChange={(checked) => {
-              setIndefiniteAccess(checked);
-              startTransition(async () => {
-                const result = await updatePolicy(accessPolicy.id, {
-                  indefiniteAccess: checked,
-                });
-                showUpdateToast(result);
+            checked={accessPolicy.indefiniteAccess}
+            onCheckedChange={async (checked) => {
+              const result = await updatePolicy(accessPolicy.id, {
+                indefiniteAccess: checked,
               });
+              showUpdateToast(result);
             }}
           />
         </div>
-        {!indefiniteAccess && (
+        {!accessPolicy.indefiniteAccess && (
           <div className="space-y-1 p-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-md">
             <Label htmlFor="accessLength" className="text-sm font-semibold">
               Access Length
             </Label>
             <Select
-              value={accessLength?.toString() ?? 'null'}
-              onValueChange={(value) => {
+              value={accessPolicy.accessLengthDays?.toString() ?? 'null'}
+              onValueChange={async (value) => {
                 const newLength = value === 'null' ? null : Number(value);
-                setAccessLength(newLength);
-                startTransition(async () => {
-                  const result = await updatePolicy(accessPolicy.id, {
-                    accessLengthDays: newLength,
-                  });
-                  showUpdateToast(result);
+                const result = await updatePolicy(accessPolicy.id, {
+                  accessLengthDays: newLength,
                 });
+                showUpdateToast(result);
               }}
             >
               <SelectTrigger id="accessLength">

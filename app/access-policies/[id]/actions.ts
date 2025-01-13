@@ -22,7 +22,9 @@ type UpdatePolicyData = {
 
 type UpdateApprovalData = {
   ApprovalReviewers?: {
-    set: { connect: { id: string } }[];
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    deleteMany: {};
+    create: { userId: string }[];
   };
 };
 
@@ -73,7 +75,6 @@ export async function updateApproval(
   data: UpdateApprovalData,
   policyId: string,
 ) {
-  console.log(data, data.ApprovalReviewers);
   try {
     await prisma.accessPolicyApproval.update({
       where: { id: approvalId },
