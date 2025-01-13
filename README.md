@@ -42,7 +42,7 @@ shadcn-ui is a library I am familiar with and while it's possible a more pre-con
 
 Primarily, the UI is pretty basic. In a lot of places where it might make sense to add additional buttons, navigation, dialogs, tooltips, etc., we've opted to skip them for time and just have simple pages that are single-purpose.
 
-Other shortcuts:
+Other items to consider:
 
 - [ ] Add pagination to data tables
 
@@ -59,5 +59,13 @@ Other shortcuts:
 - [ ] Allow for approvals to be assigned to a Group rather than just Users
 
   - Some ux research would be needed to see if this is desired or how it would be implemented (would one User in the group need to approve, or would we specify a number of users that need to approve?)
+
+- [ ] More advanced deletion logic
+
+  - Right now, we're fully deleting records from the database, rather than using a soft delete. In addtion, when we delete, we're not checking if any live policies need to be updated, or showing any warnings (for example, if we delete an approval from a live policy and there are no longer any approvers, we should probably show a warning).
+
+- [ ] More advanced policy validation logic
+
+  - We're doing some validation on publish, but we're not locking the policy after publish so there is the posiblity to edit the policy into a bad state while it is live.
 
 ## Access Policy Structure

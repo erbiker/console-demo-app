@@ -11,20 +11,23 @@ type UpdatePolicyData = {
   indefiniteAccess?: boolean;
   accessLengthDays?: number | null;
   UserVisibility?: {
-    set: { id: string }[];
+    set: [];
+    connect: { id: string }[];
   };
   UserGroupVisibility?: {
-    set: { id: string }[];
+    set: [];
+    connect: { id: string }[];
   };
 };
 
 type UpdateApprovalData = {
   ApprovalReviewers?: {
-    set: { id: string }[];
+    set: { connect: { id: string } }[];
   };
 };
 
 export async function updatePolicy(policyId: string, data: UpdatePolicyData) {
+  console.log(data);
   try {
     await prisma.accessPolicy.update({
       where: { id: policyId },
@@ -70,6 +73,7 @@ export async function updateApproval(
   data: UpdateApprovalData,
   policyId: string,
 ) {
+  console.log(data, data.ApprovalReviewers);
   try {
     await prisma.accessPolicyApproval.update({
       where: { id: approvalId },
@@ -95,13 +99,93 @@ export async function deletePolicy(policyId: string) {
 }
 
 export async function publishPolicy(policyId: string) {
+  // Validate that the policy has all the necessary data
+  const policy = await prisma.accessPolicy.findUnique({
+    where: { id: policyId },
+    include: {
+      _count: {
+        select: {
+          UserVisibility: true,
+          UserGroupVisibility: true,
+        },
+      },
+      Approvals: {
+        include: {
+          _count: {
+            select: {
+              ApprovalReviewers: true,
+            },
+          },
+        },
+      },
+      ProvisioningActions: {
+        select: {
+          actionType: true,
+        },
+      },
+    },
+  });
+
+  // These validations are performed once on publish
+  // In production, we should be always checking if a policy is in a valid state
+  // and blocking publishing or an invalid update to a live policy
+  // Alternatively, we could have a separate persisted state of the policy for published data
+  // allowing a live policy to be updated as a draft and then published to update
+  if (!policy) {
+    return { success: false, error: 'Policy not found' };
+  }
+
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  if (!policy.name) {
+    errors.push('Policy name is required');
+  }
+  if (!policy.description) {
+    errors.push('Policy description is required');
+  }
+  if (!policy.appId) {
+    errors.push('Policy app is required');
+  }
+
+  if (
+    !policy.universalVisibility &&
+    policy._count.UserVisibility === 0 &&
+    policy._count.UserGroupVisibility === 0
+  ) {
+    errors.push('Policy must have at least one user or group visibility or be visible to all');
+  }
+
+  if (policy.Approvals.length === 0) {
+    warnings.push('Policy will not require approvals');
+  }
+  if (policy.Approvals.some((approval) => approval._count.ApprovalReviewers === 0)) {
+    errors.push('Some approval steps do not have any approvers');
+  }
+
+  const grantActions = policy.ProvisioningActions.filter(
+    (action) => action.actionType === 'GRANT_ACCESS',
+  );
+  const revokeActions = policy.ProvisioningActions.filter(
+    (action) => action.actionType === 'REVOKE_ACCESS',
+  );
+  if (grantActions.length === 0) {
+    errors.push('Policy must have at least one grant action');
+  }
+  if (!policy.indefiniteAccess && revokeActions.length === 0) {
+    errors.push('Policy with an access expiration must have at least one revoke action');
+  }
+
+  if (errors.length > 0) {
+    return { success: false, errors };
+  }
+
   try {
     await prisma.accessPolicy.update({
       where: { id: policyId },
       data: { publishedAt: new Date() },
     });
     revalidatePath(`/access-policies/${policyId}`);
-    return { success: true };
+    return { success: true, warnings };
   } catch (error) {
     return { success: false, error };
   }

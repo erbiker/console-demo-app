@@ -120,12 +120,14 @@ export function DetailsTab({ accessPolicy, allUsers, allGroups }: DetailsTabProp
                   label: user.firstName + ' ' + user.lastName,
                   value: user.id,
                 }))}
+                defaultValue={accessUsers}
                 onValueChange={(values) => {
                   setAccessUsers(values);
                   startTransition(async () => {
                     const result = await updatePolicy(accessPolicy.id, {
                       UserVisibility: {
-                        set: values.map((id) => ({ id })),
+                        set: [],
+                        connect: values.map((id) => ({ id })),
                       },
                     });
                     showUpdateToast(result);
@@ -145,12 +147,14 @@ export function DetailsTab({ accessPolicy, allUsers, allGroups }: DetailsTabProp
                   label: group.name,
                   value: group.id,
                 }))}
+                defaultValue={accessGroups}
                 onValueChange={(values) => {
                   setAccessGroups(values);
                   startTransition(async () => {
                     const result = await updatePolicy(accessPolicy.id, {
                       UserGroupVisibility: {
-                        set: values.map((id) => ({ id })),
+                        set: [],
+                        connect: values.map((id) => ({ id })),
                       },
                     });
                     showUpdateToast(result);
